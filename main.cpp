@@ -25,6 +25,24 @@ void execute_command(vector<string> &args) {
         exit(0);
     }
 
+    if (args[0] == "cd") {
+        if (args.size() < 2) {
+            cerr << "cd: missing argument" << endl;
+        } else {
+            // If the directory has spaces, make sure the full path is passed
+            string path = args[1];
+            for (size_t i = 2; i < args.size(); ++i) {
+                path += " " + args[i]; // Combine the rest of the arguments into one path
+            }
+
+            // Change to the specified directory
+            if (chdir(path.c_str()) != 0) {
+                perror("cd failed");
+            }
+        }
+        return;
+    }
+
     // execute commands
     vector<char*> c_args;
     for (auto &arg : args) c_args.push_back(&arg[0]);
